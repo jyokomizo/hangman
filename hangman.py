@@ -31,10 +31,6 @@ dictionary = {}
 
 # Later implementation: letter counter for better guessing
 
-# data = ["and never lookin back, that's how", "hennyed up, remied up, ski", "and you can kiss my ass", "s: tell g unit", "he said he had to make", "we got needlz on", "don't talk to me,", "aiy-ya-ya-ya-ya-ya-ya", "mo murder, mo murder, mo murder", "an industry livin for", "and we all know jose bout", "you know that was written for you,"]
-# udrs = ["___ _____ ______ ____, ____'_ ___", "_______ __, ______ __, ___", "___ ___ ___ ____ __ ___", "_: ____ _ ____", "__ ____ __ ___ __ ____", "__ ___ ______ __", "___'_ ____ __ __,", "___-__-__-__-__-__-__", "__ ______, __ ______, __ ______", "__ ________ _____ ___", "___ __ ___ ____ ____ ____", "___ ____ ____ ___ _______ ___ ___,"]
-
-# DELETE ME LATER PLEASE DON'T FORGET YOU IDIOT
 inorder_letters = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 const_letters_list = ['e', 't', 'a', 'o', 'i', 'n', 's', 'r', 'h', 'l', 'd', 'c', 'u', 'm', 'f', 'p', 'g', 'w', 'y', 'b', 'v', 'k', 'x', 'j', 'q', 'z']
 letters_guessed = set()
@@ -175,7 +171,6 @@ def loop_func():
     global letters_guessed
     global avoid
     while (varb < 2):
-    # while (varb < len(data)):
         # Set up initial game
         response = requests.get('http://upe.42069.fun/gLq72')
         response.raise_for_status()
@@ -208,12 +203,6 @@ def loop_func():
         # List of spots in current_phrase to skip over
         avoid = []
         letters_guessed = set()
-
-        # three_guesses = 3
-        # ends = False
-        # b_list = []
-        # for char in data[varb]:
-        #     b_list.append(char)
 
         while data['status'] == 'ALIVE':
         # while not ends:
@@ -272,20 +261,6 @@ def loop_func():
                     print("appended to avoid")
                 print("guess from inorder_letters")
                 char_to_guess = inorder_letters.pop(0)
-
-            # # No char chosen
-            # if char_to_guess == "":
-            #     # guess from inorder_letters
-            #     print("guess from inorder_letters")
-            #     char_to_guess = inorder_letters.pop(0)
-            # else:
-            #     inorder_letters.pop(inorder_letters.index(char_to_guess))
-            #     # list_selection = True
-
-            # # If attempted to get char but none in dictionary, add index of slot guessing to skip over
-            # if list_selection and dict_index == -1:
-            #     avoid.append(spot)
-            #     print("appended to avoid")
 
             print("char:", char_to_guess)
             letters_guessed.add(char_to_guess)
@@ -355,50 +330,6 @@ def loop_func():
         print("correct guesses:", correct_guess)
 
         varb += 1
-
-    # # import sys
-    # # data = []
-
-    # data = ["_", "______", "__", "___s", "____s"]
-    # entry_to_store("soups")
-    # entry_to_store("then")
-    # entry_to_store("turn")
-
-    # spot = pick_word(data)
-    # print("chosen:", spot)
-    # dict_index = 0
-
-    # if spot != -1:
-    #     # guess based on spot
-    #     char_to_guess, dict_index = post_letter(data[spot], dict_index)
-    # # No char chosen
-    # if char_to_guess == "":
-    #     # guess from inorder_letters
-    #     char_to_guess = inorder_letters.pop(0)
-    # else:
-    #     inorder_letters.pop(inorder_letters.index(char_to_guess))
-
-    # print("guess?", char_to_guess)
-    # print("remaining:", inorder_letters)
-
-    # data = "i wonder if this works cause if this doesn't, i will be so sad; cats and dogs, but, i and such sad work please if not i cry; but and' imma i'm scold but who, am. you are, and, sad cats, but crying happy dogs are so am pleasing but not please food for the food up above around the corner in working cause works but also"
-    # s = ""
-    # for i in data:
-    #     if i.isalpha():
-    #             s += i
-    #     if i.isspace():
-    #         if s != "":
-    #             entry_to_store(s)
-    #             s = ""
-    # # Add last word to dictionary
-    # if s != "":
-    #     entry_to_store(s)
-
-    # print ("store:", dictionary)
-    # for a in dictionary:
-    #     print("length bin:", a)
-    #     for b in dictionary[a]:
-    #         print("word val:", b.word, "frq:", b.frq)
 
 def main():
     loop_func()
