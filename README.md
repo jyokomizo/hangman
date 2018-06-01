@@ -4,3 +4,6 @@ This program will only run on Python3. Additionally, the user must download a mo
 name of requests, which can be found here:
 
 http://docs.python-requests.org/en/master/
+
+The algorithm uses a base of 145 more frequent English words for guessing the phrase, which is
+stored in the file sample.txt.
