@@ -147,12 +147,13 @@ def post_letter(phrase, index):
     guess = "+"
     phrase_length = len(phrase)
     selection = dictionary[phrase_length]
+    indices = set()
     if index == -1:
         index = 0
     print("start in dict:", index)
     for i in range(index, len(selection)):
         print("curr:", selection[i].word)
-        indices = set()
+        indices.clear()
         match = []
         for j in range(phrase_length):
             if phrase[j] != "_":
