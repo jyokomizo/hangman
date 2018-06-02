@@ -145,7 +145,7 @@ def post_letter(phrase, index):
     phrase_length = len(phrase)
     selection = dictionary[phrase_length]
     indices = set()
-    match = False
+    match = []
     if index == -1:
         index = 0
     print("start in dict:", index)
@@ -156,8 +156,12 @@ def post_letter(phrase, index):
                 indices.add(j)
                 print("j:", j, "curr let:", selection[i].word[j], "phrase", phrase[j])
                 if selection[i].word[j] == phrase[j]:
-                    match = True
-        if match:
+                    match.append(1)
+                else:
+                    match.append(0)
+        # Checks if all letters in phrase == selectionp[i].word
+        # https://stackoverflow.com/questions/3844801/check-if-all-elements-in-a-list-are-identical
+        if match.count(match[0]) == len(match):
             guess = select_letter(selection[i].word, indices)
             if guess == "+":
                 continue
@@ -179,9 +183,6 @@ def loop_func():
             print ("header:", header)
             print ("data:", data[header])
 
-        inorder_letters = list(const_letters_list)
-
-        letters_guessed = set()
         # Import words from text file, insert into data structure
         file_data = (line.strip('\n') for line in open('sample.txt', 'r'))
         # https://stackoverflow.com/questions/3277503/in-python-how-do-i-read-a-file-line-by-line-into-a-list
@@ -197,12 +198,16 @@ def loop_func():
             for b in dictionary[a]:
                 print("word val:", b.word, "frq:", b.frq)
 
+        inorder_letters = list(const_letters_list)
         dict_index = 0
         correct_guess = set()
         list_selection = False
         # List of spots in current_phrase to skip over
         avoid = []
         letters_guessed = set()
+        spot = -1
+        past_spot = -1
+        past_word = ""
 
         while data['status'] == 'ALIVE':
         # while not ends:
@@ -215,7 +220,7 @@ def loop_func():
             # for i in udrs[varb]:
                 if i.isalpha():
                     s += i
-                    temp_correct.add(i)
+                    # temp_correct.add(i)
                 if i == '_':
                     s += i
                 if i.isspace():
@@ -227,13 +232,21 @@ def loop_func():
                 num_words += 1
                 current_phrase.append(s)
 
-            print("list_selection %s", list_selection)
+            print("spot after current_phrase", spot)
+            # Reset dict_index if word from last game fully guessed
+            if spot != -1:
+                if current_phrase[spot].isalpha():
+                    dict_index = 0
+                    print("reset dict_index")
+
             # if list_selection:
-            # If guess from last game failed
-            if list_selection and len(temp_correct) == len(correct_guess):
-                dict_index += 1
-            else:
-                correct_guess = set(temp_correct)
+            # print("list_selection %s", list_selection)
+            # print("temp", len(temp_correct), "corr", len(correct_guess))
+            # # If guess from last game failed
+            # if list_selection and len(temp_correct) == len(correct_guess):
+            #     dict_index += 1
+            # else:
+            #     correct_guess = set(temp_correct)
 
             print("next dict_index:", dict_index)
 
@@ -243,7 +256,21 @@ def loop_func():
             print("correct guesses:", correct_guess)
 
             spot = pick_word(current_phrase)
-            print("spot to guess:", spot)
+            print("spot to guess:", spot, "past_spot", past_spot)
+            if spot != past_spot:
+                past_spot = spot
+                dict_index = 0
+                print("updated past_spot and reset dict_index")
+            # spot == past_spot
+            else:
+                # if guess from last game failed
+                # print("list_selection %s", list_selection, "temp", len(temp_correct), "corr", len(correct_guess))
+                # if list_selection and len(temp_correct) == len(correct_guess):
+                if past_word != current_phrase[past_spot]:
+                    dict_index += 1
+                else:
+                    correct_guess = set(temp_correct)
+                past_word = current_phrase[past_spot]
             char_to_guess = ""
             if spot != -1:
                 # guess based on spot
@@ -261,6 +288,7 @@ def loop_func():
                     print("appended to avoid")
                 print("guess from inorder_letters")
                 char_to_guess = inorder_letters.pop(0)
+                list_selection = False
 
             print("char:", char_to_guess)
             letters_guessed.add(char_to_guess)
@@ -269,33 +297,6 @@ def loop_func():
 
             print("letters guessed:", letters_guessed)
             print("inorder_letters", inorder_letters)
-
-            # time.sleep(1)
-            # a_list = []
-            # for char in udrs[varb]:
-            #     a_list.append(char)
-
-            # for i in range(len(udrs[varb])):
-            #     if b_list[i] == char_to_guess:
-            #         got_guess = True
-            #         a_list[i] = char_to_guess
-
-            # udrs[varb] = ""
-            # for char in a_list:
-            #     udrs[varb] += char
-
-            # if not got_guess:
-            #     three_guesses -= 1
-
-            # if three_guesses == 0:
-            #     ends = True
-            #     break
-
-            # for char in udrs[varb]:
-            #     if char == "_":
-            #         break
-            #     else:
-            #         ends = True
 
             time.sleep(2)
 
