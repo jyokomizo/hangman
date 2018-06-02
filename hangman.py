@@ -178,7 +178,7 @@ def loop_func():
     global inorder_letters
     global letters_guessed
     global avoid
-    while (varb < 2):
+    while (varb < 100):
         # Set up initial game
         response = requests.get('http://upe.42069.fun/gLq72')
         response.raise_for_status()
@@ -211,7 +211,7 @@ def loop_func():
         letters_guessed = set()
         spot = -1
         past_spot = -1
-        past_word = ""
+        # past_word = ""
 
         while data['status'] == 'ALIVE':
         # while not ends:
@@ -237,11 +237,11 @@ def loop_func():
                 current_phrase.append(s)
 
             print("spot after current_phrase", spot)
-            # Reset dict_index if word from last game fully guessed
-            if spot != -1:
-                if current_phrase[spot].isalpha():
-                    dict_index = 0
-                    print("reset dict_index")
+            # # Reset dict_index if word from last game fully guessed
+            # if spot != -1:
+            #     if current_phrase[spot].isalpha():
+            #         dict_index = 0
+            #         print("reset dict_index")
 
             print("next dict_index:", dict_index)
 
@@ -253,24 +253,24 @@ def loop_func():
             spot = pick_word(current_phrase)
             print("spot to guess:", spot, "past_spot", past_spot)
             if spot != past_spot:
-                past_word = current_phrase[past_spot]
-                print("assign past word")
+                # past_word = current_phrase[past_spot]
+                # print("assign past word")
                 past_spot = spot
                 dict_index = 0
                 print("updated past_spot and reset dict_index")
             # spot == past_spot
             else:
                 # if guess from last game failed
-                print("list_selection %s", list_selection, "past_word", past_word, "curr word", current_phrase[past_spot])
-                # print("list_selection %s", list_selection, "temp", len(temp_correct), "corr", len(correct_guess))
-                # if list_selection and len(temp_correct) == len(correct_guess):
-                if list_selection and past_word == current_phrase[past_spot]:
+                # print("list_selection %s", list_selection, "past_word", past_word, "curr word", current_phrase[past_spot])
+                print("list_selection %s", list_selection, "temp", len(temp_correct), "corr", len(correct_guess))
+                if list_selection and len(temp_correct) == len(correct_guess):
+                # if list_selection and past_word == current_phrase[past_spot]:
                     dict_index += 1
                     print("incr dict_index")
                 # else:
                     # correct_guess = set(temp_correct)
                     # print("assign correct_guess")
-                past_word = current_phrase[past_spot]
+                # past_word = current_phrase[past_spot]
             # past_word = current_phrase[past_spot]
             # print("assign past word")
             correct_guess = set(temp_correct)
