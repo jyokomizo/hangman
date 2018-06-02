@@ -97,11 +97,12 @@ def pick_word(phrase):
         tmp_letter = 0
         for i in completed:
             # print("i", i, "tmp vals (let len):", tmp_letter, tmp_length)
-            # Choose word with most letters completed or shorter word if equal
-            if i[0] > tmp_letter or (i[0] == tmp_letter and i[1] < tmp_length):
-                tmp_spot = completed.index(i)
-                tmp_letter = i[0]
-                tmp_length = i[1]
+            if i[0] != 0 or i[0] != -1 or i[0] != -2:
+                # Choose word with most letters completed or shorter word if equal
+                if i[0] > tmp_letter or (i[0] == tmp_letter and i[1] < tmp_length):
+                    tmp_spot = completed.index(i)
+                    tmp_letter = i[0]
+                    tmp_length = i[1]
     # else:
     #     for i in completed:
     #         # Choose shortest word (with entries in dictionary of same length)
@@ -223,7 +224,7 @@ def loop_func():
             # for i in udrs[varb]:
                 if i.isalpha():
                     s += i
-                    # temp_correct.add(i)
+                    temp_correct.add(i)
                 if i == '_':
                     s += i
                 if i.isspace():
@@ -242,15 +243,6 @@ def loop_func():
                     dict_index = 0
                     print("reset dict_index")
 
-            # if list_selection:
-            # print("list_selection %s", list_selection)
-            # print("temp", len(temp_correct), "corr", len(correct_guess))
-            # # If guess from last game failed
-            # if list_selection and len(temp_correct) == len(correct_guess):
-            #     dict_index += 1
-            # else:
-            #     correct_guess = set(temp_correct)
-
             print("next dict_index:", dict_index)
 
             print("phrase:", current_phrase)
@@ -261,6 +253,8 @@ def loop_func():
             spot = pick_word(current_phrase)
             print("spot to guess:", spot, "past_spot", past_spot)
             if spot != past_spot:
+                past_word = current_phrase[past_spot]
+                print("assign past word")
                 past_spot = spot
                 dict_index = 0
                 print("updated past_spot and reset dict_index")
@@ -277,6 +271,8 @@ def loop_func():
                     # correct_guess = set(temp_correct)
                     # print("assign correct_guess")
                 past_word = current_phrase[past_spot]
+            # past_word = current_phrase[past_spot]
+            # print("assign past word")
             correct_guess = set(temp_correct)
             print("assign correct_guess")
             char_to_guess = ""
