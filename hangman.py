@@ -74,11 +74,13 @@ def pick_word(phrase):
     # Check if no letters guessed in phrase
     empty = True
     for i in range(len(phrase)):
-        if i in avoid:
-            continue
         word = phrase[i]
         length = len(word)
         num_letters = 0
+        if i in avoid:
+            # Add dummy value to list if avoid word to keep indexing consistent
+            completed.append([-2, length])
+            continue
         for c in word:
             if c.isalpha():
                 num_letters += 1
@@ -145,12 +147,12 @@ def post_letter(phrase, index):
     phrase_length = len(phrase)
     selection = dictionary[phrase_length]
     indices = set()
-    match = []
     if index == -1:
         index = 0
     print("start in dict:", index)
     for i in range(index, len(selection)):
         print("curr:", selection[i].word)
+        match = []
         for j in range(phrase_length):
             if phrase[j] != "_":
                 indices.add(j)
@@ -159,9 +161,10 @@ def post_letter(phrase, index):
                     match.append(1)
                 else:
                     match.append(0)
+        print("match", match)
         # Checks if all letters in phrase == selectionp[i].word
         # https://stackoverflow.com/questions/3844801/check-if-all-elements-in-a-list-are-identical
-        if match.count(match[0]) == len(match):
+        if match and match[0] != 0 and match.count(match[0]) == len(match):
             guess = select_letter(selection[i].word, indices)
             if guess == "+":
                 continue
@@ -264,13 +267,18 @@ def loop_func():
             # spot == past_spot
             else:
                 # if guess from last game failed
+                print("list_selection %s", list_selection, "past_word", past_word, "curr word", current_phrase[past_spot])
                 # print("list_selection %s", list_selection, "temp", len(temp_correct), "corr", len(correct_guess))
                 # if list_selection and len(temp_correct) == len(correct_guess):
-                if past_word != current_phrase[past_spot]:
+                if list_selection and past_word == current_phrase[past_spot]:
                     dict_index += 1
-                else:
-                    correct_guess = set(temp_correct)
+                    print("incr dict_index")
+                # else:
+                    # correct_guess = set(temp_correct)
+                    # print("assign correct_guess")
                 past_word = current_phrase[past_spot]
+            correct_guess = set(temp_correct)
+            print("assign correct_guess")
             char_to_guess = ""
             if spot != -1:
                 # guess based on spot
