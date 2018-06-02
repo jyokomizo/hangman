@@ -147,12 +147,12 @@ def post_letter(phrase, index):
     guess = "+"
     phrase_length = len(phrase)
     selection = dictionary[phrase_length]
-    indices = set()
     if index == -1:
         index = 0
     print("start in dict:", index)
     for i in range(index, len(selection)):
         print("curr:", selection[i].word)
+        indices = set()
         match = []
         for j in range(phrase_length):
             if phrase[j] != "_":
@@ -169,8 +169,8 @@ def post_letter(phrase, index):
             guess = select_letter(selection[i].word, indices)
             if guess == "+":
                 continue
-            return guess, i
-    return guess, -1
+            return guess, i, indices
+    return guess, -1, indices
 
 def loop_func():
     varb = 0
@@ -178,6 +178,13 @@ def loop_func():
     global inorder_letters
     global letters_guessed
     global avoid
+    # Import words from text file, insert into data structure
+    file_data = (line.strip('\n') for line in open('sample.txt', 'r'))
+    # https://stackoverflow.com/questions/3277503/in-python-how-do-i-read-a-file-line-by-line-into-a-list
+    for word in file_data:
+        curr = entry(word)
+        dictionary[len(word)] = dictionary.get(len(word), list())
+        dictionary[len(word)].append(curr)
     while (varb < 100):
         # Set up initial game
         response = requests.get('http://upe.42069.fun/gLq72')
@@ -187,16 +194,6 @@ def loop_func():
             print ("header:", header)
             print ("data:", data[header])
 
-        # Import words from text file, insert into data structure
-        file_data = (line.strip('\n') for line in open('sample.txt', 'r'))
-        # https://stackoverflow.com/questions/3277503/in-python-how-do-i-read-a-file-line-by-line-into-a-list
-        for word in file_data:
-            curr = entry(word)
-            dictionary[len(word)] = dictionary.get(len(word), list())
-            dictionary[len(word)].append(curr)
-        # print("store:", dictionary)
-
-        # print ("store:", dictionary)
         for a in dictionary:
             print("length bin:", a)
             for b in dictionary[a]:
@@ -211,7 +208,8 @@ def loop_func():
         letters_guessed = set()
         spot = -1
         past_spot = -1
-        # past_word = ""
+        past_word = ""
+        i_set = set()
 
         while data['status'] == 'ALIVE':
         # while not ends:
@@ -227,7 +225,7 @@ def loop_func():
                     temp_correct.add(i)
                 if i == '_':
                     s += i
-                if i.isspace():
+                if i.isspace() or i == "/":
                     if s != "":
                         num_words += 1    
                         current_phrase.append(s)
@@ -260,26 +258,28 @@ def loop_func():
                 print("updated past_spot and reset dict_index")
             # spot == past_spot
             else:
+                # for c in current_phrase[past_spot]:
+
                 # if guess from last game failed
-                # print("list_selection %s", list_selection, "past_word", past_word, "curr word", current_phrase[past_spot])
-                print("list_selection %s", list_selection, "temp", len(temp_correct), "corr", len(correct_guess))
-                if list_selection and len(temp_correct) == len(correct_guess):
-                # if list_selection and past_word == current_phrase[past_spot]:
+                print("list_selection %s", list_selection, "past_word", past_word, "curr word", current_phrase[past_spot])
+                # print("list_selection %s", list_selection, "temp", len(temp_correct), "corr", len(correct_guess))
+                # if list_selection and len(temp_correct) == len(correct_guess):
+                if list_selection and past_word == current_phrase[past_spot]:
                     dict_index += 1
                     print("incr dict_index")
                 # else:
                     # correct_guess = set(temp_correct)
                     # print("assign correct_guess")
                 # past_word = current_phrase[past_spot]
-            # past_word = current_phrase[past_spot]
-            # print("assign past word")
+            past_word = current_phrase[spot]
+            print("assign past word")
             correct_guess = set(temp_correct)
             print("assign correct_guess")
             char_to_guess = ""
             if spot != -1:
                 # guess based on spot
                 try:
-                    char_to_guess, dict_index = post_letter(current_phrase[spot], dict_index)
+                    char_to_guess, dict_index, i_set = post_letter(current_phrase[spot], dict_index)
                 except KeyError:
                     char_to_guess = "+"
 
@@ -318,7 +318,7 @@ def loop_func():
         # for i in data[varb]:
             if i.isalpha():
                 s += i
-            if i.isspace():
+            if i.isspace() or i == "/":
                 if s != "":
                     entry_to_store(s)
                     s = ""
@@ -326,7 +326,6 @@ def loop_func():
         if s != "":
             entry_to_store(s)
 
-        # print ("store:", dictionary)
         for a in dictionary:
             print("length bin:", a)
             for b in dictionary[a]:

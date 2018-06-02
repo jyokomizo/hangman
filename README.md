@@ -5,5 +5,5 @@ name of requests, which can be found here:
 
 http://docs.python-requests.org/en/master/
 
-The algorithm uses a base of 148 more frequent English words for guessing the phrase, which is
+The algorithm uses a base of 150 more frequent English words for guessing the phrase, which is
 stored in the file sample.txt.
