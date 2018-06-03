@@ -125,14 +125,11 @@ def select_letter(word, nums):
         # If looking at already guessed letter in word
         if i in nums:
             continue
-        # 
+        # If current letter already guessed
         if word[i] in letters_guessed:
             continue
-        # temp = const_letters_list.index(word[i])
         temp = inorder_letters.index(word[i])
         print("temp:", temp)
-        # if temp in nums:
-        #     continue
         if temp < place:
             place = temp
             print("place:", place)
@@ -215,14 +212,11 @@ def loop_func():
         guess_pass = False
 
         while data['status'] == 'ALIVE':
-        # while not ends:
-            # got_guess = False
             num_words = 0
             current_phrase = []
             temp_correct = set()
             s = ""
             for i in data['state']:
-            # for i in udrs[varb]:
                 if i.isalpha():
                     s += i
                     temp_correct.add(i)
@@ -248,11 +242,6 @@ def loop_func():
             print("assign correct_guess")
 
             print("spot after current_phrase", spot)
-            # # Reset dict_index if word from last game fully guessed
-            # if spot != -1:
-            #     if current_phrase[spot].isalpha():
-            #         dict_index = 0
-            #         print("reset dict_index")
 
             print("next dict_index:", dict_index)
 
@@ -264,12 +253,9 @@ def loop_func():
             spot = pick_word(current_phrase, guess_pass)
             print("spot to guess:", spot, "past_spot", past_spot)
             if spot != past_spot:
-                # past_word = current_phrase[past_spot]
-                # print("assign past word")
                 past_spot = spot
                 dict_index = 0
                 print("updated past_spot and reset dict_index")
-            # spot == past_spot
             else:
                 # for c in current_phrase[past_spot]:
 
@@ -280,10 +266,6 @@ def loop_func():
                 if list_selection and past_word == current_phrase[past_spot]:
                     dict_index += 1
                     print("incr dict_index")
-                # else:
-                    # correct_guess = set(temp_correct)
-                    # print("assign correct_guess")
-                # past_word = current_phrase[past_spot]
             past_word = current_phrase[spot]
             print("assign past word")
             char_to_guess = ""
@@ -326,7 +308,6 @@ def loop_func():
 
         s = ""
         for i in data['lyrics']:
-        # for i in data[varb]:
             if i.isalpha():
                 s += i
             if i.isspace() or i == "/":
@@ -348,7 +329,6 @@ def loop_func():
 
 def main():
     loop_func()
-    
 
 if __name__ == "__main__":
     main()
