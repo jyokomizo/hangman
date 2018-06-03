@@ -68,7 +68,7 @@ def entry_to_store(string):
 Picks which word out of the phrase to be guessed to attempt to fill in
 Returns index within phrase to be guessed
 """
-def pick_word(phrase):
+def pick_word(phrase, boolean):
     # 2D list to hold index
     completed = []
     # Check if no letters guessed in phrase
@@ -77,10 +77,11 @@ def pick_word(phrase):
         word = phrase[i]
         length = len(word)
         num_letters = 0
-        if i in avoid:
-            # Add dummy value to list if avoid word to keep indexing consistent
-            completed.append([-2, length])
-            continue
+        if boolean:
+            if i in avoid:
+                # Add dummy value to list if avoid word to keep indexing consistent
+                completed.append([-2, length])
+                continue
         for c in word:
             if c.isalpha():
                 num_letters += 1
@@ -186,7 +187,7 @@ def loop_func():
         curr = entry(word)
         dictionary[len(word)] = dictionary.get(len(word), list())
         dictionary[len(word)].append(curr)
-    while (varb < 100):
+    while (varb < 101):
         # Set up initial game
         response = requests.get('http://upe.42069.fun/gLq72')
         response.raise_for_status()
@@ -211,6 +212,7 @@ def loop_func():
         past_spot = -1
         past_word = ""
         i_set = set()
+        guess_pass = False
 
         while data['status'] == 'ALIVE':
         # while not ends:
@@ -235,6 +237,16 @@ def loop_func():
                 num_words += 1
                 current_phrase.append(s)
 
+            if len(correct_guess) == len(temp_correct):
+                guess_pass = False
+                print("guess failed")
+            else:
+                guess_pass = True
+                print("guess correct")
+
+            correct_guess = set(temp_correct)
+            print("assign correct_guess")
+
             print("spot after current_phrase", spot)
             # # Reset dict_index if word from last game fully guessed
             # if spot != -1:
@@ -249,7 +261,7 @@ def loop_func():
                 print("word:", a)
             print("correct guesses:", correct_guess)
 
-            spot = pick_word(current_phrase)
+            spot = pick_word(current_phrase, guess_pass)
             print("spot to guess:", spot, "past_spot", past_spot)
             if spot != past_spot:
                 # past_word = current_phrase[past_spot]
@@ -274,8 +286,6 @@ def loop_func():
                 # past_word = current_phrase[past_spot]
             past_word = current_phrase[spot]
             print("assign past word")
-            correct_guess = set(temp_correct)
-            print("assign correct_guess")
             char_to_guess = ""
             if spot != -1:
                 # guess based on spot
